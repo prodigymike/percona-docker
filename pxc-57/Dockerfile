@@ -20,7 +20,9 @@ ENV PERCONA_VERSION 5.7.16-27.19-1.jessie
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN     apt-get update \
-	&& apt-get install -y --force-yes --no-install-recommends percona-xtradb-cluster-57 jq dnsutils \
+# ProdigyMike: Add curl for testing from this container
+#	&& apt-get install -y --force-yes --no-install-recommends percona-xtradb-cluster-57 jq dnsutils \
+	&& apt-get install -y --force-yes --no-install-recommends percona-xtradb-cluster-57 jq dnsutils curl \
 	&& rm -rf /var/lib/apt/lists/* \
 # comment out any "user" entires in the MySQL config ("docker-entrypoint.sh" or "--user" will handle user switching)
 	&& sed -ri 's/^user\s/#&/' /etc/mysql/my.cnf \
@@ -43,6 +45,9 @@ ADD node.cnf /etc/mysql/conf.d/node.cnf
 
 COPY entrypoint.sh /
 COPY healthcheck.sh /
+
+# ProdigyMike: Fix server 'flapping' error (can't execute this file) received.
+RUN chmod a+x /entrypoint.sh
 
 EXPOSE 3306 4567 4568
 

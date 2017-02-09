@@ -115,7 +115,16 @@ if [ !  -z "$CLUSTER_NAME" ]; then
     myIp=$(dig -t A +short $(hostname))
 
     # get all task IP's
-    readarray -t serviceIpArray <<< "$(dig -t A +short tasks.$SERVICE_NAME)"
+#    readarray -t serviceIpArray <<< "$(dig -t A +short tasks.$SERVICE_NAME)"
+
+    # ProdigyMike
+    serviceIpArray=()
+    for c in $(curl -s rancher-metadata/latest/services/pxc/containers); do
+        # echo -e "$c"
+        i=$(echo $c | cut -d'=' -f1)
+        serviceIpArray+=(`curl -s rancher-metadata/latest/services/pxc/containers/$i/primary_ip`)
+        # echo -e "IP: `curl -s rancher-metadata/latest/services/pxc/containers/$i/primary_ip`"
+    done
 
     echo -e "Trying to find a cluster node \n"
 
