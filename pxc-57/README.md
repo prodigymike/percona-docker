@@ -6,6 +6,10 @@ The image supports work in Docker Network, including overlay networks,
 so that you can install Percona XtraDB Cluster nodes on different boxes.
 There is an initial support for the etcd discovery service.
 
+**MY EDITS**
+
+I've updated pxc-57 to be more Rancher & Kubernetes cluster friendly. It'll now work with Services to gather Container IPs that belong to it. Helping the bootstrap process.
+
 Basic usage
 -----------
 
